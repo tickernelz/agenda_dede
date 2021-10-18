@@ -545,7 +545,7 @@
 <script src="{{ mix('js/codebase.app.js') }}"></script>
 
 <!-- Laravel Scaffolding JS -->
-<!-- <script src="{{ mix('js/laravel.app.js') }}"></script> -->
+<script src="{{ mix('js/laravel.app.js') }}"></script>
 
 @yield('js_after')
 </body>
