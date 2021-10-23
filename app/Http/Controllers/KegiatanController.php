@@ -29,13 +29,11 @@ class KegiatanController extends Controller
     public function getKegiatan(): object
     {
         $kegiatan = [
-            ['id' => '1', 'nama' => 'Penyusunan Program'],
-            ['id' => '2', 'nama' => 'Keuangan dan Pengelolaan Aset'],
-            ['id' => '3', 'nama' => 'Kepegawaian dan Umum'],
-            ['id' => '4', 'nama' => 'Kesehatan Masyarakat'],
-            ['id' => '5', 'nama' => 'Pencegahan dan Pengendalian Penyakit'],
-            ['id' => '6', 'nama' => 'Pelayanan Kesehatan'],
-            ['id' => '7', 'nama' => 'Sumber Daya Kesehatan'],
+            ['id' => '1', 'nama' => 'Sekretariat'],
+            ['id' => '2', 'nama' => 'Bid. Kesmas'],
+            ['id' => '3', 'nama' => 'Bid. Yankes'],
+            ['id' => '4', 'nama' => 'Bid. SDK'],
+            ['id' => '5', 'nama' => 'Bid. P2'],
         ];
         $kegiatan = (object)$kegiatan;
         return $kegiatan;
@@ -44,7 +42,7 @@ class KegiatanController extends Controller
     public function cari(Request $request)
     {
         // List Kegiatan
-        $kegiatan[] = $this->getKegiatan();
+        $kegiatan = $this->getKegiatan();
 
         // Get Request Data
         $getkegiatan = Crypt::decrypt($request->kegiatan);
