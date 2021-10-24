@@ -37,7 +37,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('kegiatan', [KegiatanController::class, 'index'])->name('index-kegiatan');
         Route::get('kegiatan/cari', [KegiatanController::class, 'cari'])->name('cari-kegiatan');
         Route::post('kegiatan/cari/tambah-post', [KegiatanController::class, 'tambah'])->name('tambah-kegiatan');
+        Route::post('kegiatan/cari/edit-post', [KegiatanController::class, 'edit'])->name('edit-kegiatan');
         Route::get('kegiatan/cari/hapus/{id}', [KegiatanController::class, 'hapus'])->name('hapus-kegiatan');
+        Route::get('kegiatan/cari/hapus-berkas/{id}', [KegiatanController::class, 'hapus_berkas'])->name('hapus-berkas-kegiatan');
+        Route::get('get-kegiatan', [KegiatanController::class, 'getdataKegiatan'])->name('get-kegiatan');
     });
     Route::get('home', [HomeController::class, 'index'])->name('home');
 });

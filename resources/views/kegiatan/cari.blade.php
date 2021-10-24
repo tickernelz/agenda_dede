@@ -41,37 +41,32 @@
                 dropdownParent: $('#modal-tambah')
             });
         });
+
+        function editFunc(id) {
+            $.ajax({
+                type: "GET",
+                url: "{{ route('get-kegiatan') }}",
+                dataType: "JSON",
+                data: {id: id},
+                success: function (data) {
+                    $.map(data, function (obj) {
+                        $('#modal-edit').modal('show');
+                        $('[name="idedit"]').val(obj.id);
+                        $('[name="tglmulaiedit"]').val(obj.tanggaldari).trigger('change');
+                        $('[name="tglakhiredit"]').val(obj.tanggalsampai).trigger('change');
+                        $('[name="kegiatanedit"]').val(obj.kegiatan);
+                        $('[name="keteranganedit"]').val(obj.keterangan);
+                        $('[name="tempatedit"]').val(obj.tempat).trigger('change');
+                        $('[name="provinsiedit"]').val(obj.provinsi).trigger('change');
+                        $('[name="kotaedit"]').val(obj.kota).trigger('change');
+                        $('[name="kecamatanedit"]').val(obj.kecamatan).trigger('change');
+                        $('[name="berkasedit"]').val(obj.berkas);
+                    });
+                }
+            });
+            return false;
+        }
     </script>
-    {{--    <script>--}}
-    {{--        function tambahFunc() {--}}
-    {{--            $.ajax({--}}
-    {{--                type: "POST",--}}
-    {{--                url: "{{ route('tambah-kegiatan') }}",--}}
-    {{--                data: {--}}
-    {{--                    _token: "{{ csrf_token() }}",--}}
-    {{--                    bagian: $('#bagian').val(),--}}
-    {{--                    tglmulai: $('#tglmulai').val(),--}}
-    {{--                    tglakhir: $('#tglakhir').val(),--}}
-    {{--                    kegiatan: $('#kegiatan').val(),--}}
-    {{--                    keterangan: $('#keterangan').val(),--}}
-    {{--                    tempat: $('#tempat').val(),--}}
-    {{--                    provinsi: $('#provinsi').val(),--}}
-    {{--                    kota: $('#kota').val(),--}}
-    {{--                    kecamatan: $('#kecamatan').val(),--}}
-    {{--                    berkas: $('#berkas').val(),--}}
-    {{--                },--}}
-    {{--                dataType: 'json',--}}
-    {{--                success: function (res) {--}}
-    {{--                    $("#modal-tambah").modal('hide');--}}
-    {{--                    location.reload();--}}
-    {{--                },--}}
-    {{--                error: function (data) {--}}
-    {{--                    alert('Gagal Input!')--}}
-    {{--                    console.log(data);--}}
-    {{--                }--}}
-    {{--            });--}}
-    {{--        }--}}
-    {{--    </script>--}}
 @endsection
 
 @section('judul')
@@ -160,7 +155,7 @@
                                 <th>Kecamatan</th>
                                 <th>Kota</th>
                                 <th>Provinsi</th>
-                                <th>Berkas</th>
+                                <th class="text-center">Berkas</th>
                                 <th class="text-center">Aksi</th>
                             </tr>
                             </thead>
@@ -176,16 +171,27 @@
                                     <td>{{$list->kecamatan}}</td>
                                     <td>{{$list->kota}}</td>
                                     <td>{{$list->provinsi}}</td>
-                                    <td>
-                                        <a type="button" class="btn btn-sm btn-secondary"
-                                           href="/berkas/{{$list->berkas}}">
-                                            Lihat Berkas
-                                        </a>
+                                    <td class="text-center">
+                                        @if (isset($list->berkas))
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <a type="button" class="btn btn-secondary"
+                                                   href="/berkas/{{$list->berkas}}">
+                                                    Lihat
+                                                </a>
+                                                <a type="button" class="btn btn-sm btn-secondary"
+                                                   href="{{ Request::url() }}/hapus-berkas/{{$list->id}}"
+                                                   onclick="return confirm('Yakin Mau Dihapus?');">
+                                                    Hapus
+                                                </a>
+                                            </div>
+                                        @else
+                                            Tidak Ada Berkas
+                                        @endif
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group btn-group-sm" role="group">
                                             <a type="button" class="btn btn-secondary"
-                                               href="{{ Request::url() }}/edit/{{$list->id}}">
+                                               onclick="editFunc({{ $list->id }})">
                                                 <i class="fa fa-edit"></i>
                                             </a>
                                             <a type="button" class="btn btn-secondary"
@@ -203,6 +209,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal Tambah -->
         <div class="modal fade" id="modal-tambah" tabindex="-1" role="dialog" aria-labelledby="modal-slideup"
              aria-hidden="true">
             <div class="modal-dialog modal-dialog-slideup" role="document">
@@ -211,7 +219,7 @@
                         @csrf
                         <div class="block block-themed block-transparent mb-0">
                             <div class="block-header bg-primary-dark">
-                                <h3 class="block-title">Tambah</h3>
+                                <h3 class="block-title">Tambah Kegiatan</h3>
                                 <div class="block-options">
                                     <button type="button" class="btn-block-option" data-dismiss="modal"
                                             aria-label="Close">
@@ -289,6 +297,111 @@
                                         <input type="file" class="custom-file-input" id="berkas"
                                                name="berkas" data-toggle="custom-file-input">
                                         <label class="custom-file-label" for="berkas">Pilih Berkas</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-alt-success">
+                                <i class="fa fa-check"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Modal Edit -->
+        <div class="modal fade" id="modal-edit" tabindex="-1" role="dialog" aria-labelledby="modal-slideup"
+             aria-hidden="true">
+            <div class="modal-dialog modal-dialog-slideup" role="document">
+                <div class="modal-content">
+                    <form action="{{ route('edit-kegiatan') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="block block-themed block-transparent mb-0">
+                            <div class="block-header bg-primary-dark">
+                                <h3 class="block-title">Edit Kegiatan</h3>
+                                <div class="block-options">
+                                    <button type="button" class="btn-block-option" data-dismiss="modal"
+                                            aria-label="Close">
+                                        <i class="si si-close"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="block-content">
+                                <input type="hidden" class="form-control bg-white"
+                                       value="{{ Crypt::decrypt(Request::get('kegiatan')) }}" id="bagianedit"
+                                       name="bagianedit">
+                                <input type="hidden" class="form-control bg-white" id="idedit" name="idedit">
+                                <div class="mb-3">
+                                    <label class="form-label" for="tglmulaiedit">Tanggal Mulai</label>
+                                    <input type="text" class="js-flatpickr form-control bg-white" id="tglmulaiedit"
+                                           name="tglmulaiedit" data-allow-input="false" data-enable-time="true"
+                                           data-date-format="Y-m-d H:i" data-time_24hr="true">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="tglakhiredit">Tanggal Akhir</label>
+                                    <input type="text" class="js-flatpickr form-control bg-white" id="tglakhiredit"
+                                           name="tglakhiredit" data-allow-input="false" data-enable-time="true"
+                                           data-date-format="Y-m-d H:i" data-time_24hr="true">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="kegiatanedit">Kegiatan</label>
+                                    <input type="text" class="form-control bg-white" id="kegiatanedit"
+                                           name="kegiatanedit">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="keteranganedit">Keterangan</label>
+                                    <input type="text" class="form-control bg-white" id="keteranganedit"
+                                           name="keteranganedit">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="tempatedit">Tempat</label>
+                                    <input type="text" class="form-control bg-white" id="tempatedit" name="tempatedit">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="provinsiedit">Provinsi</label>
+                                    <select class="js-select2 form-select" name="provinsiedit"
+                                            id="provinsiedit" style="width: 100%;" data-placeholder="Pilih Provinsi..">
+                                        <option></option>
+                                        @foreach($provinsi as $list)
+                                            <option
+                                                value="{{ $list->nama }}">{{$list->nama}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="kotaedit">Kota</label>
+                                    <select class="js-select2 form-select" name="kotaedit"
+                                            id="kotaedit" style="width: 100%;" data-placeholder="Pilih Kota..">
+                                        <option></option>
+                                        @foreach($kota as $list)
+                                            <option
+                                                value="{{ $list->nama }}">{{$list->nama}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="kecamatanedit">Kecamatan</label>
+                                    <select class="js-select2 form-select" name="kecamatanedit"
+                                            id="kecamatanedit" style="width: 100%;"
+                                            data-placeholder="Pilih Kecamatan..">
+                                        <option></option>
+                                        @foreach($kecamatan as $list)
+                                            <option
+                                                value="{{ $list->nama }}">{{$list->nama}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label" for="berkasedit">Upload Berkas</label>
+                                    <div class="custom-file">
+                                        <!-- Populating custom file input label with the selected filename (data-toggle="custom-file-input" is initialized in Helpers.coreBootstrapCustomFileInput()) -->
+                                        <input type="file" class="custom-file-input" id="berkas"
+                                               name="berkasedit" data-toggle="custom-file-input">
+                                        <label class="custom-file-label" for="berkasedit">Pilih Berkas</label>
                                     </div>
                                 </div>
                             </div>

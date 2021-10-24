@@ -39,6 +39,14 @@ class KegiatanController extends Controller
         return $kegiatan;
     }
 
+    public function getdataKegiatan(Request $request)
+    {
+        $id = $request->id;
+        $data = Kegiatan::whereId($id)->get();
+
+        return Response()->json($data);
+    }
+
     public function cari(Request $request)
     {
         // List Kegiatan
@@ -95,6 +103,49 @@ class KegiatanController extends Controller
             ->with('success', 'Data Berhasil Ditambahkan!');
     }
 
+    public function edit(Request $request)
+    {
+        $request->validate([
+            'tglmulaiedit' => 'required',
+            'tglakhiredit' => 'required',
+            'kegiatanedit' => 'required',
+            'keteranganedit' => 'required',
+            'provinsiedit' => 'required',
+            'kotaedit' => 'required',
+            'kecamatanedit' => 'required',
+            'berkasedit' => 'file|mimes:pdf',
+        ]);
+
+        $data = Kegiatan::where('id', $request->idedit)->first();
+
+        $data->bagian = $request->bagianedit;
+        $data->tanggaldari = $request->tglmulaiedit;
+        $data->tanggalsampai = $request->tglakhiredit;
+        $data->kegiatan = $request->kegiatanedit;
+        $data->keterangan = $request->keteranganedit;
+        $data->tempat = $request->tempatedit;
+        $data->provinsi = $request->provinsiedit;
+        $data->kota = $request->kotaedit;
+        $data->kecamatan = $request->kecamatanedit;
+
+        // Cek apakah ada berkas?
+        if ($request->hasFile('berkasedit')) {
+            // Hapus Berkas Lama (Jika Ada)
+            $namaberkas = $data->berkas;
+            if (is_file(public_path('berkas') . '/' . $namaberkas)) {
+                unlink(public_path('berkas') . '/' . $namaberkas);
+            }
+            // Upload File Baru
+            $fileName = time() . '_' . $request->berkasedit->getClientOriginalName();
+            $request->berkasedit->move(public_path('berkas'), $fileName);
+            $data->berkas = $fileName;
+        }
+        $data->save();
+
+        return back()
+            ->with('success', 'Data Berhasil Diperbarui!');
+    }
+
     /**
      * @param Request $request
      * @param Kegiatan $KegiatanModel
@@ -117,10 +168,27 @@ class KegiatanController extends Controller
         $kegiatan = Kegiatan::find($id);
         $namaberkas = $kegiatan->berkas;
 
-        unlink(public_path('berkas') . '/' . $namaberkas);
+        // Hapus Berkas Lama (Jika Ada)
+        if (is_file(public_path('berkas') . '/' . $namaberkas)) {
+            unlink(public_path('berkas') . '/' . $namaberkas);
+        }
         $kegiatan->delete();
 
         return back()
             ->with('success', 'Data Berhasil Dihapus!');
+    }
+
+    public function hapus_berkas(int $id)
+    {
+        $kegiatan = Kegiatan::find($id);
+        $namaberkas = $kegiatan->berkas;
+
+        // Hapus Berkas Lama ()
+        unlink(public_path('berkas') . '/' . $namaberkas);
+        $kegiatan->berkas = null;
+        $kegiatan->save();
+
+        return back()
+            ->with('success', 'Berkas Berhasil Dihapus!');
     }
 }
