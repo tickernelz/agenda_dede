@@ -213,7 +213,7 @@
                                 <i class="fa fa-dashboard"></i><span class="sidebar-mini-hide">Dashboard</span>
                             </a>
                         </li>
-                        @role('super_admin')
+                        @can('kelola user')
                         <li class="nav-main-heading">
                             <span class="sidebar-mini-visible">PE</span><span
                                 class="sidebar-mini-hidden">Pengguna</span>
@@ -224,23 +224,26 @@
                                 <i class="si si-users"></i><span class="sidebar-mini-hide">Kelola User</span>
                             </a>
                         </li>
-                        @endrole
+                        @endcan
                         <li class="nav-main-heading">
                             <span class="sidebar-mini-visible">KL</span><span class="sidebar-mini-hidden">Kelola</span>
                         </li>
-                        @hasanyrole('super_admin|admin')
-                        <li>
-                            <a class="{{ request()->is('kegiatan', 'kegiatan/*') ? ' active' : '' }}"
-                               href="{{ route('index-kegiatan') }}">
-                                <i class="si si-doc"></i><span class="sidebar-mini-hide">Agenda Kegiatan</span>
-                            </a>
-                        </li>
-                        @endhasanyrole
-                        <li>
-                            <a href="/">
-                                <i class="si si-info"></i><span class="sidebar-mini-hide">Informasi Kegiatan</span>
-                            </a>
-                        </li>
+                        @can('kelola agenda')
+                            <li>
+                                <a class="{{ request()->is('kegiatan', 'kegiatan/*') ? ' active' : '' }}"
+                                   href="{{ route('index-kegiatan') }}">
+                                    <i class="si si-doc"></i><span class="sidebar-mini-hide">Agenda Kegiatan</span>
+                                </a>
+                            </li>
+                        @endcan
+                        @can('melihat agenda')
+                            <li>
+                                <a class="{{ request()->is('informasi', 'informasi/*') ? ' active' : '' }}"
+                                   href="{{ route('index-informasi') }}">
+                                    <i class="si si-info"></i><span class="sidebar-mini-hide">Informasi Kegiatan</span>
+                                </a>
+                            </li>
+                        @endcan
                     </ul>
                 </div>
                 <!-- END Side Navigation -->

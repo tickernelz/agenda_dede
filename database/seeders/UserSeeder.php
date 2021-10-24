@@ -36,6 +36,6 @@ class UserSeeder extends Seeder
             'nip' => '1234563',
             'status' => 'user',
             'password' => bcrypt('123'),
-        ])->assignRole('user');
+        ])->assignRole('sekretariat');
     }
 }

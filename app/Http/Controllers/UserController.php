@@ -94,15 +94,20 @@ class UserController extends Controller
         $user->save();
 
         // Menambah Peran User
-        if ($get_status === 'super_admin')
-        {
+        if ($get_status === 'super_admin') {
             $user->assignRole('super_admin');
-        } elseif ($get_status === 'admin')
-        {
+        } elseif ($get_status === 'admin') {
             $user->assignRole('admin');
-        } elseif ($get_status === 'user')
-        {
-            $user->assignRole('user');
+        } elseif ($get_status === 'sekretariat') {
+            $user->assignRole('sekretariat');
+        } elseif ($get_status === 'kesmas') {
+            $user->assignRole('kesmas');
+        } elseif ($get_status === 'yankes') {
+            $user->assignRole('yankes');
+        } elseif ($get_status === 'sdk') {
+            $user->assignRole('sdk');
+        } elseif ($get_status === 'p2') {
+            $user->assignRole('p2');
         }
 
         return back()->with('success', 'Data Berhasil Ditambahkan!.');
@@ -110,11 +115,11 @@ class UserController extends Controller
 
     public function edit(Request $request, int $id)
     {
-        $nipori = User::find($id)->first()->nip;
+        $nipori = User::find($id)->nip;
         $nipedit = $request->input('nip');
-        $usernameori = User::find($id)->first()->username;
+        $usernameori = User::find($id)->username;
         $usernameedit = $request->input('username');
-        $passori = User::find($id)->first()->password;
+        $passori = User::find($id)->password;
         $passedit = $request->input('password');
 
         $rules1 = [
@@ -197,11 +202,28 @@ class UserController extends Controller
         $data->username = $get_username;
         $data->nama = $get_nama;
         $data->nip = $get_nip;
-        $data->status =  $get_status;
+        $data->status = $get_status;
         if ($passori !== $passedit) {
             $data->password = $get_password;
         }
+
         $data->save();
+        // Menambah Peran User
+        if ($get_status === 'super_admin') {
+            $data->syncRoles('super_admin');
+        } elseif ($get_status === 'admin') {
+            $data->syncRoles('admin');
+        } elseif ($get_status === 'sekretariat') {
+            $data->syncRoles('sekretariat');
+        } elseif ($get_status === 'kesmas') {
+            $data->syncRoles('kesmas');
+        } elseif ($get_status === 'yankes') {
+            $data->syncRoles('yankes');
+        } elseif ($get_status === 'sdk') {
+            $data->syncRoles('sdk');
+        } elseif ($get_status === 'p2') {
+            $data->syncRoles('p2');
+        }
 
         return back()->with('success', 'Data Berhasil Diubah!.');
     }

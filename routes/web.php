@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InformasiKegiatan;
 use App\Http\Controllers\KegiatanController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -24,7 +25,7 @@ Route::post('login', [AuthController::class, 'login'])->name('post-login');
 
 // Route Akses
 Route::group(['middleware' => 'auth'], function () {
-    Route::group(['middleware' => ['role:super_admin']], function () {
+    Route::group(['middleware' => ['can:kelola user']], function () {
         // Kelola User
         Route::get('user', [UserController::class, 'index'])->name('index-user');
         Route::get('user/tambah', [UserController::class, 'tambahindex'])->name('tambahindex-user');
@@ -33,7 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('user/edit/{id}/post', [UserController::class, 'edit'])->name('edit-user');
         Route::get('user/hapus/{id}', [UserController::class, 'hapus'])->name('hapus-user');
     });
-    Route::group(['middleware' => ['role:super_admin|admin']], function () {
+    Route::group(['middleware' => ['can:kelola agenda']], function () {
         Route::get('kegiatan', [KegiatanController::class, 'index'])->name('index-kegiatan');
         Route::get('kegiatan/cari', [KegiatanController::class, 'cari'])->name('cari-kegiatan');
         Route::post('kegiatan/cari/tambah-post', [KegiatanController::class, 'tambah'])->name('tambah-kegiatan');
@@ -41,6 +42,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('kegiatan/cari/hapus/{id}', [KegiatanController::class, 'hapus'])->name('hapus-kegiatan');
         Route::get('kegiatan/cari/hapus-berkas/{id}', [KegiatanController::class, 'hapus_berkas'])->name('hapus-berkas-kegiatan');
         Route::get('get-kegiatan', [KegiatanController::class, 'getdataKegiatan'])->name('get-kegiatan');
+    });
+    Route::group(['middleware' => ['can:melihat agenda']], function () {
+        Route::get('informasi', [InformasiKegiatan::class, 'index'])->name('index-informasi');
     });
     Route::get('home', [HomeController::class, 'index'])->name('home');
 });

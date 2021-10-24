@@ -84,21 +84,45 @@
                                 <!-- Required for data-placeholder attribute to work with Select2 plugin -->
                                 <option value="{{ Crypt::encrypt('super_admin') }}"
                                         @if ($data->status === 'super_admin')
-                                selected="selected"
-                                    @endif>Super Admin</option>
+                                        selected="selected"
+                                    @endif>Super Admin
+                                </option>
                                 <option value="{{ Crypt::encrypt('admin') }}"
                                         @if ($data->status === 'admin')
                                         selected="selected"
-                                    @endif>Admin</option>
-                                <option value="{{ Crypt::encrypt('user') }}"
-                                        @if ($data->status === 'user')
+                                    @endif>Admin
+                                </option>
+                                <option value="{{ Crypt::encrypt('sekretariat') }}"
+                                        @if ($data->status === 'sekretariat')
                                         selected="selected"
-                                    @endif>User</option>
+                                    @endif>Sekretariat
+                                </option>
+                                <option value="{{ Crypt::encrypt('kesmas') }}"
+                                        @if ($data->status === 'kesmas')
+                                        selected="selected"
+                                    @endif>Bid. Kesmas
+                                </option>
+                                <option value="{{ Crypt::encrypt('yankes') }}"
+                                        @if ($data->status === 'yankes')
+                                        selected="selected"
+                                    @endif>Bid. Yankes
+                                </option>
+                                <option value="{{ Crypt::encrypt('sdk') }}"
+                                        @if ($data->status === 'sdk')
+                                        selected="selected"
+                                    @endif>Bid. SDK
+                                </option>
+                                <option value="{{ Crypt::encrypt('p2') }}"
+                                        @if ($data->status === 'p2')
+                                        selected="selected"
+                                    @endif>Bid. P2
+                                </option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Masukan password.." value="{{$data->password}}">
+                            <input type="password" class="form-control" id="password" name="password"
+                                   placeholder="Masukan password.." value="{{$data->password}}">
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-alt-primary">Edit</button>

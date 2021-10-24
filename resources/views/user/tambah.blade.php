@@ -83,12 +83,17 @@
                                 <!-- Required for data-placeholder attribute to work with Select2 plugin -->
                                 <option value="{{ Crypt::encrypt('super_admin') }}">Super Admin</option>
                                 <option value="{{ Crypt::encrypt('admin') }}">Admin</option>
-                                <option value="{{ Crypt::encrypt('user') }}">User</option>
+                                <option value="{{ Crypt::encrypt('sekretariat') }}">Sekretariat</option>
+                                <option value="{{ Crypt::encrypt('kesmas') }}">Bid. Kesmas</option>
+                                <option value="{{ Crypt::encrypt('yankes') }}">Bid. Yankes</option>
+                                <option value="{{ Crypt::encrypt('sdk') }}">Bid. SDK</option>
+                                <option value="{{ Crypt::encrypt('p2') }}">Bid. P2</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Masukan password..">
+                            <input type="password" class="form-control" id="password" name="password"
+                                   placeholder="Masukan password..">
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-alt-primary">Tambah</button>
