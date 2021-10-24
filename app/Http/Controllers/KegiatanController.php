@@ -114,7 +114,11 @@ class KegiatanController extends Controller
 
     public function hapus(int $id)
     {
-        Kegiatan::find($id)->delete();
+        $kegiatan = Kegiatan::find($id);
+        $namaberkas = $kegiatan->berkas;
+
+        unlink(public_path('berkas') . '/' . $namaberkas);
+        $kegiatan->delete();
 
         return back()
             ->with('success', 'Data Berhasil Dihapus!');
