@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bagian;
 use App\Models\Kegiatan;
 use Crypt;
 use DB;
@@ -15,28 +16,12 @@ class KegiatanController extends Controller
         $judulblock = 'Pencarian Kegiatan';
 
         // List Kegiatan
-        $kegiatan = $this->getKegiatan();
+        $kegiatan = Bagian::get();
 
         return view('kegiatan.index', [
             'judulblock' => $judulblock,
             'kegiatan' => $kegiatan,
         ]);
-    }
-
-    /**
-     * @return object
-     */
-    public function getKegiatan(): object
-    {
-        $kegiatan = [
-            ['id' => '1', 'nama' => 'Sekretariat'],
-            ['id' => '2', 'nama' => 'Bid. Kesmas'],
-            ['id' => '3', 'nama' => 'Bid. Yankes'],
-            ['id' => '4', 'nama' => 'Bid. SDK'],
-            ['id' => '5', 'nama' => 'Bid. P2'],
-        ];
-        $kegiatan = (object)$kegiatan;
-        return $kegiatan;
     }
 
     public function getdataKegiatan(Request $request)
@@ -50,13 +35,13 @@ class KegiatanController extends Controller
     public function cari(Request $request)
     {
         // List Kegiatan
-        $kegiatan = $this->getKegiatan();
+        $kegiatan = Bagian::get();
 
         // Get Request Data
         $getkegiatan = Crypt::decrypt($request->kegiatan);
 
         // Get Data dari database
-        $datakegiatan = Kegiatan::where('bagian', $getkegiatan)->get();
+        $datakegiatan = Kegiatan::where('bagian_id', $getkegiatan)->get();
         $kota = DB::table('tbl_kabupaten')->get();
         $kecamatan = DB::table('tbl_kecamatan')->get();
         $provinsi = DB::table('tbl_provinsi')->get();
@@ -118,7 +103,7 @@ class KegiatanController extends Controller
 
         $data = Kegiatan::where('id', $request->idedit)->first();
 
-        $data->bagian = $request->bagianedit;
+        $data->bagian_id = $request->bagianedit;
         $data->tanggaldari = $request->tglmulaiedit;
         $data->tanggalsampai = $request->tglakhiredit;
         $data->kegiatan = $request->kegiatanedit;
@@ -152,7 +137,7 @@ class KegiatanController extends Controller
      */
     public function request_tambah(Request $request, Kegiatan $KegiatanModel): void
     {
-        $KegiatanModel->bagian = $request->bagian;
+        $KegiatanModel->bagian_id = $request->bagian;
         $KegiatanModel->tanggaldari = $request->tglmulai;
         $KegiatanModel->tanggalsampai = $request->tglakhir;
         $KegiatanModel->kegiatan = $request->kegiatan;

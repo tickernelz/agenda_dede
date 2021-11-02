@@ -22,7 +22,7 @@ class pageTablesDatatables {
                 lengthMenu: "_MENU_",
                 search: "_INPUT_",
                 searchPlaceholder: "Cari..",
-                emptyTable: "'Kosong' seperti perasaan dia",
+                emptyTable: "Data Kosong",
                 info: "Halaman <strong>_PAGE_</strong> dari <strong>_PAGES_</strong>",
                 paginate: {
                     first: '<i class="fa fa-angle-double-left"></i>',

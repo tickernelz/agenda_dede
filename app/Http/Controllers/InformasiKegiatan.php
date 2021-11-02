@@ -13,23 +13,16 @@ class InformasiKegiatan extends Controller
         $user = Auth::user();
 
         // Get Data Kegiatan
-        if ($user->hasRole('sekretariat')) {
-            $data = Kegiatan::where('bagian', '1')->get();
-            $judulblock = 'Informasi Kegiatan Sekretariat';
-        } elseif ($user->hasRole('kesmas')) {
-            $data = Kegiatan::where('bagian', '2')->get();
-            $judulblock = 'Informasi Kegiatan Bid. Kesmas';
-        } elseif ($user->hasRole('yankes')) {
-            $data = Kegiatan::where('bagian', '3')->get();
-            $judulblock = 'Informasi Kegiatan Bid. Yankes';
-        } elseif ($user->hasRole('sdk')) {
-            $data = Kegiatan::where('bagian', '4')->get();
-            $judulblock = 'Informasi Kegiatan Bid. SDK';
-        } elseif ($user->hasRole('p2')) {
-            $data = Kegiatan::where('bagian', '5')->get();
-            $judulblock = 'Informasi Kegiatan Bid. P2';
+        if ($user->hasAnyRole('Super Admin|Admin')) {
+            $data = Kegiatan::with('bagian')->get();
+            $judulblock = 'Informasi Kegiatan (Semua Bidang)';
+        } elseif ($user->hasRole($user->roles->first()->name)) {
+            $data = Kegiatan::whereHas('bagian', function ($q) use ($user) {
+                $q->where('nama', $user->roles->first()->name);
+            })->get();
+            $judulblock = 'Informasi Kegiatan ' . $user->roles->first()->name . '';
         } else {
-            $data = Kegiatan::get();
+            $data = Kegiatan::with('bagian')->get();
             $judulblock = 'Informasi Kegiatan (Semua Bidang)';
         }
 

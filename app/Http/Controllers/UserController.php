@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Crypt;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 use Validator;
 
 class UserController extends Controller
@@ -15,7 +16,7 @@ class UserController extends Controller
         $judulblock = 'Daftar User';
 
         // Get Data
-        $data = User::get();
+        $data = User::with('roles')->get();
 
         return view('user.index', [
             'judulblock' => $judulblock,
@@ -28,8 +29,12 @@ class UserController extends Controller
         // Nilai tetap
         $judulblock = 'Tambah Data User';
 
+        // Get Data
+        $roles = Role::all();
+
         return view('user.tambah', [
             'judulblock' => $judulblock,
+            'roles' => $roles,
         ]);
     }
 
@@ -39,43 +44,25 @@ class UserController extends Controller
         $judulblock = 'Edit Data User';
 
         // Get Data
-        $data = User::find($id);
+        $data = User::with('roles')->find($id);
+        $roles = Role::all();
 
         return view('user.edit', [
             'judulblock' => $judulblock,
             'data' => $data,
+            'roles' => $roles,
         ]);
     }
 
     public function tambah(Request $request)
     {
-        $rules = [
+        $request->validate([
             'username' => 'required|string|unique:users',
             'nama' => 'required|string',
             'nip' => 'required|unique:users',
             'status' => 'required|string',
             'password' => 'required|string',
-        ];
-
-        $messages = [
-            'username.required' => 'Username wajib diisi',
-            'username.unique' => 'Username harus beda dari yang lain',
-            'username.string' => 'Username tidak valid',
-            'nama.required' => 'Nama wajib diisi',
-            'nama.string' => 'Nama tidak valid',
-            'nip.required' => 'NIP wajib diisi',
-            'nip.unique' => 'NIP harus beda dari yang lain',
-            'status.required' => 'Status wajib diisi',
-            'status.string' => 'Status harus berupa string',
-            'password.required' => 'Password wajib diisi',
-            'password.string' => 'Password harus berupa string',
-        ];
-
-        $validator = Validator::make($request->all(), $rules, $messages);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput($request->all);
-        }
+        ]);
 
         // Get Request
         $get_username = $request->input('username');
@@ -89,26 +76,9 @@ class UserController extends Controller
         $user->username = $get_username;
         $user->nama = $get_nama;
         $user->nip = $get_nip;
-        $user->status =  $get_status;
         $user->password = $get_password;
         $user->save();
-
-        // Menambah Peran User
-        if ($get_status === 'super_admin') {
-            $user->assignRole('super_admin');
-        } elseif ($get_status === 'admin') {
-            $user->assignRole('admin');
-        } elseif ($get_status === 'sekretariat') {
-            $user->assignRole('sekretariat');
-        } elseif ($get_status === 'kesmas') {
-            $user->assignRole('kesmas');
-        } elseif ($get_status === 'yankes') {
-            $user->assignRole('yankes');
-        } elseif ($get_status === 'sdk') {
-            $user->assignRole('sdk');
-        } elseif ($get_status === 'p2') {
-            $user->assignRole('p2');
-        }
+        $user->assignRole($get_status);
 
         return back()->with('success', 'Data Berhasil Ditambahkan!.');
     }
@@ -202,28 +172,11 @@ class UserController extends Controller
         $data->username = $get_username;
         $data->nama = $get_nama;
         $data->nip = $get_nip;
-        $data->status = $get_status;
         if ($passori !== $passedit) {
             $data->password = $get_password;
         }
-
         $data->save();
-        // Menambah Peran User
-        if ($get_status === 'super_admin') {
-            $data->syncRoles('super_admin');
-        } elseif ($get_status === 'admin') {
-            $data->syncRoles('admin');
-        } elseif ($get_status === 'sekretariat') {
-            $data->syncRoles('sekretariat');
-        } elseif ($get_status === 'kesmas') {
-            $data->syncRoles('kesmas');
-        } elseif ($get_status === 'yankes') {
-            $data->syncRoles('yankes');
-        } elseif ($get_status === 'sdk') {
-            $data->syncRoles('sdk');
-        } elseif ($get_status === 'p2') {
-            $data->syncRoles('p2');
-        }
+        $data->assignRole($get_status);
 
         return back()->with('success', 'Data Berhasil Diubah!.');
     }

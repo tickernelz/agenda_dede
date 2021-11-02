@@ -16,7 +16,7 @@
 @endsection
 
 @section('judul')
-    Kelola User
+    Kelola Bagian
 @endsection
 
 @section('content')
@@ -26,7 +26,7 @@
             <div class="block-header block-header-default">
                 <h3 class="block-title">{{ $judulblock }}</h3>
                 <div class="block-options">
-                    <a href="{{ route('tambahindex-user') }}">
+                    <a href="{{ route('tambahindex-bagian') }}">
                         <button type="button" class="btn btn-sm btn-primary">Tambah</button>
                     </a>
                 </div>
@@ -37,10 +37,7 @@
                         <thead>
                         <tr>
                             <th class="text-center" style="width: 5%">#</th>
-                            <th class="text-center">NIP</th>
-                            <th class="text-center">Username</th>
-                            <th class="text-center">Nama</th>
-                            <th class="text-center">Status</th>
+                            <th class="text-center">Nama Bagian</th>
                             <th class="text-center">Aksi</th>
                         </tr>
                         </thead>
@@ -48,10 +45,7 @@
                         @foreach($data as $li)
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
-                                <td class="text-center">{{ $li->nip }}</td>
-                                <td class="text-center">{{ $li->username }}</td>
                                 <td class="text-center">{{ $li->nama }}</td>
-                                <td class="text-center">{{ $li->roles->first()->name }}</td>
                                 <td class="text-center">
                                     <div class="btn-group btn-group-sm" role="group">
                                         <a type="button" class="btn btn-secondary"

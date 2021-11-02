@@ -218,16 +218,24 @@
                             <span class="sidebar-mini-visible">PE</span><span
                                 class="sidebar-mini-hidden">Pengguna</span>
                         </li>
-                        <li>
-                            <a class="{{ request()->is('user', 'user/*') ? ' active' : '' }}"
-                               href="{{ route('index-user') }}">
-                                <i class="si si-users"></i><span class="sidebar-mini-hide">Kelola User</span>
-                            </a>
-                        </li>
+                            <li>
+                                <a class="{{ request()->is('user', 'user/*') ? ' active' : '' }}"
+                                   href="{{ route('index-user') }}">
+                                    <i class="si si-users"></i><span class="sidebar-mini-hide">Kelola User</span>
+                                </a>
+                            </li>
                         @endcan
                         <li class="nav-main-heading">
                             <span class="sidebar-mini-visible">KL</span><span class="sidebar-mini-hidden">Kelola</span>
                         </li>
+                        @can('kelola bagian')
+                            <li>
+                                <a class="{{ request()->is('bagian', 'bagian/*') ? ' active' : '' }}"
+                                   href="{{ route('index-bagian') }}">
+                                    <i class="si si-grid"></i><span class="sidebar-mini-hide">Bagian</span>
+                                </a>
+                            </li>
+                        @endcan
                         @can('kelola agenda')
                             <li>
                                 <a class="{{ request()->is('kegiatan', 'kegiatan/*') ? ' active' : '' }}"

@@ -34,7 +34,8 @@
                         <thead>
                         <tr>
                             <th class="text-center" style="width: 3%">#</th>
-                            @if(Auth::user()->hasAnyRole('super_admin|admin'))
+                            <th>Status</th>
+                            @if(Auth::user()->hasAnyRole('Super Admin|Admin'))
                                 <th>Bagian</th>
                             @endif
                             <th>Tanggal Mulai</th>
@@ -52,22 +53,17 @@
                         @foreach($data as $list)
                             <tr>
                                 <td class="text-center">{{$loop->iteration}}</td>
-                                @if(Auth::user()->hasAnyRole('super_admin|admin'))
-                                    @if($list->bagian === '1')
-                                        <td>Sekretariat</td>
-                                    @endif
-                                    @if($list->bagian === '2')
-                                        <td>Bid. Kesmas</td>
-                                    @endif
-                                    @if($list->bagian === '3')
-                                        <td>Bid. Yankes</td>
-                                    @endif
-                                    @if($list->bagian === '4')
-                                        <td>Bid. SDK</td>
-                                    @endif
-                                    @if($list->bagian === '5')
-                                        <td>Bid. P2</td>
-                                    @endif
+                                @if (\Carbon\Carbon::now() < ($list->tanggaldari))
+                                    <td><span class="badge badge-primary">Belum Dimulai</span></td>
+                                @endif
+                                @if (\Carbon\Carbon::now() > ($list->tanggaldari) && \Carbon\Carbon::now() < ($list->tanggalsampai))
+                                    <td><span class="badge badge-secondary">Berlangsung</span></td>
+                                @endif
+                                @if (\Carbon\Carbon::now() > ($list->tanggalsampai))
+                                    <td><span class="badge badge-success">Selesai</span></td>
+                                @endif
+                                @if(Auth::user()->hasAnyRole('Super Admin|Admin'))
+                                    <td>{{$list->bagian->nama}}</td>
                                 @endif
                                 <td>{{$list->tanggaldari}}</td>
                                 <td>{{$list->tanggalsampai}}</td>

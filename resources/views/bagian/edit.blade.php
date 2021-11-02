@@ -23,7 +23,7 @@
 @endsection
 
 @section('judul')
-    Tambah User
+    Edit User
 @endsection
 
 @section('content')
@@ -34,6 +34,9 @@
                 <div class="block-header block-header-default">
                     <h3 class="block-title">{{$judulblock}}</h3>
                     <div class="block-options">
+                        <a href="{{ redirect()->getUrlGenerator()->route('index-bagian') }}">
+                            <button type="button" class="btn btn-sm btn-primary">Kembali</button>
+                        </a>
                     </div>
                 </div>
                 <div class="block-content">
@@ -60,39 +63,15 @@
                             {{ Session::get('error') }}
                         </div>
                     @endif
-                    <form action="{{ route('tambah-user') }}" method="post">
+                    <form action="{{url()->current()}}/post" method="post">
                         @csrf
                         <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" class="form-control" id="username" name="username"
-                                   placeholder="Masukan Username..">
-                        </div>
-                        <div class="form-group">
                             <label for="nama">Nama</label>
-                            <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukan Nama..">
+                            <input type="text" class="form-control" id="nama" name="nama"
+                                   placeholder="Masukan Nama Bagian.." value="{{$data->nama}}">
                         </div>
                         <div class="form-group">
-                            <label for="nip">NIP</label>
-                            <input type="number" class="form-control" id="nip" name="nip" placeholder="Masukan NIP..">
-                        </div>
-                        <div class="form-group">
-                            <label for="status">Status</label>
-                            <select class="js-select2 form-control" id="status" name="status"
-                                    style="width: 100%;" data-placeholder="Pilih Status..">
-                                <option></option>
-                                <!-- Required for data-placeholder attribute to work with Select2 plugin -->
-                                @foreach($roles as $list)
-                                    <option value="{{ Crypt::encrypt($list->id) }}">{{ $list->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" id="password" name="password"
-                                   placeholder="Masukan password..">
-                        </div>
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-alt-primary">Tambah</button>
+                            <button type="submit" class="btn btn-alt-primary">Edit</button>
                         </div>
                     </form>
                 </div>

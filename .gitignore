@@ -16,3 +16,7 @@ yarn-error.log
 
 # Project exclude paths
 /storage/
+/agenda_dede.zip
+/agenda_dede_localhost-2021_10_24_15_58_13-dump.sql
+/.phpstorm.meta.php
+/_ide_helper.php

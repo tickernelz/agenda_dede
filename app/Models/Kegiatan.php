@@ -38,6 +38,9 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|Kegiatan whereTempat($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Kegiatan whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read int|null $bagian_count
+ * @property int $bagian_id
+ * @method static \Illuminate\Database\Eloquent\Builder|Kegiatan whereBagianId($value)
  */
 class Kegiatan extends Model
 {
@@ -46,4 +49,9 @@ class Kegiatan extends Model
     protected $guarded = [
         'id',
     ];
+
+    public function bagian()
+    {
+        return $this->belongsTo(Bagian::class);
+    }
 }

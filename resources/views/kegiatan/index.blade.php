@@ -24,7 +24,7 @@
 @section('content')
     <!-- Page Content -->
     <div class="content">
-        <div class="col-md-6 " style="float:none;margin:auto;">
+        <div class="col-md-12 " style="float:none;margin:auto;">
             <div class="block">
                 <form action="{{ route('cari-kegiatan') }}" method="get">
                     @csrf

@@ -35,17 +35,17 @@ var pageTablesDatatables = /*#__PURE__*/function () {
 
       jQuery.extend(true, jQuery.fn.dataTable.defaults, {
         language: {
-          lengthMenu: "_MENU_",
-          search: "_INPUT_",
-          searchPlaceholder: "Cari..",
-          emptyTable: "'Kosong' seperti perasaan dia",
-          info: "Halaman <strong>_PAGE_</strong> dari <strong>_PAGES_</strong>",
-          paginate: {
-            first: '<i class="fa fa-angle-double-left"></i>',
-            previous: '<i class="fa fa-angle-left"></i>',
-            next: '<i class="fa fa-angle-right"></i>',
-            last: '<i class="fa fa-angle-double-right"></i>'
-          }
+            lengthMenu: "_MENU_",
+            search: "_INPUT_",
+            searchPlaceholder: "Cari..",
+            emptyTable: "Data Kosong",
+            info: "Halaman <strong>_PAGE_</strong> dari <strong>_PAGES_</strong>",
+            paginate: {
+                first: '<i class="fa fa-angle-double-left"></i>',
+                previous: '<i class="fa fa-angle-left"></i>',
+                next: '<i class="fa fa-angle-right"></i>',
+                last: '<i class="fa fa-angle-double-right"></i>'
+            }
         }
       }); // Init full DataTable
 

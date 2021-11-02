@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Bagian;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,7 +16,7 @@ class CreateKegiatansTable extends Migration
     {
         Schema::create('kegiatans', function (Blueprint $table) {
             $table->id();
-            $table->string('bagian');
+            $table->foreignIdFor(Bagian::class);
             $table->dateTime('tanggaldari');
             $table->dateTime('tanggalsampai');
             $table->longText('kegiatan');

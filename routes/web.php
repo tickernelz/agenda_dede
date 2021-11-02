@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BagianController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InformasiKegiatan;
 use App\Http\Controllers\KegiatanController;
@@ -33,6 +34,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('user/edit/{id}', [UserController::class, 'editindex'])->name('editindex-user');
         Route::post('user/edit/{id}/post', [UserController::class, 'edit'])->name('edit-user');
         Route::get('user/hapus/{id}', [UserController::class, 'hapus'])->name('hapus-user');
+    });
+    Route::group(['middleware' => ['can:kelola bagian']], function () {
+        // Kelola User
+        Route::get('bagian', [BagianController::class, 'index'])->name('index-bagian');
+        Route::get('bagian/tambah', [BagianController::class, 'tambahindex'])->name('tambahindex-bagian');
+        Route::post('bagian/tambah/post', [BagianController::class, 'tambah'])->name('tambah-bagian');
+        Route::get('bagian/edit/{id}', [BagianController::class, 'editindex'])->name('editindex-bagian');
+        Route::post('bagian/edit/{id}/post', [BagianController::class, 'edit'])->name('edit-bagian');
+        Route::get('bagian/hapus/{id}', [BagianController::class, 'hapus'])->name('hapus-bagian');
     });
     Route::group(['middleware' => ['can:kelola agenda']], function () {
         Route::get('kegiatan', [KegiatanController::class, 'index'])->name('index-kegiatan');

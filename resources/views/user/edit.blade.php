@@ -34,7 +34,9 @@
                 <div class="block-header block-header-default">
                     <h3 class="block-title">{{$judulblock}}</h3>
                     <div class="block-options">
-                        <a href="{{ redirect()->getUrlGenerator()->route('index-user') }}"><button type="button" class="btn btn-sm btn-primary">Kembali</button></a>
+                        <a href="{{ redirect()->getUrlGenerator()->route('index-user') }}">
+                            <button type="button" class="btn btn-sm btn-primary">Kembali</button>
+                        </a>
                     </div>
                 </div>
                 <div class="block-content">
@@ -70,11 +72,13 @@
                         </div>
                         <div class="form-group">
                             <label for="nama">Nama</label>
-                            <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukan Nama.." value="{{$data->nama}}">
+                            <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukan Nama.."
+                                   value="{{$data->nama}}">
                         </div>
                         <div class="form-group">
                             <label for="nip">NIP</label>
-                            <input type="number" class="form-control" id="nip" name="nip" placeholder="Masukan NIP.." value="{{$data->nip}}">
+                            <input type="number" class="form-control" id="nip" name="nip" placeholder="Masukan NIP.."
+                                   value="{{$data->nip}}">
                         </div>
                         <div class="form-group">
                             <label for="status">Status</label>
@@ -82,41 +86,12 @@
                                     style="width: 100%;" data-placeholder="Pilih Status..">
                                 <option></option>
                                 <!-- Required for data-placeholder attribute to work with Select2 plugin -->
-                                <option value="{{ Crypt::encrypt('super_admin') }}"
-                                        @if ($data->status === 'super_admin')
-                                        selected="selected"
-                                    @endif>Super Admin
-                                </option>
-                                <option value="{{ Crypt::encrypt('admin') }}"
-                                        @if ($data->status === 'admin')
-                                        selected="selected"
-                                    @endif>Admin
-                                </option>
-                                <option value="{{ Crypt::encrypt('sekretariat') }}"
-                                        @if ($data->status === 'sekretariat')
-                                        selected="selected"
-                                    @endif>Sekretariat
-                                </option>
-                                <option value="{{ Crypt::encrypt('kesmas') }}"
-                                        @if ($data->status === 'kesmas')
-                                        selected="selected"
-                                    @endif>Bid. Kesmas
-                                </option>
-                                <option value="{{ Crypt::encrypt('yankes') }}"
-                                        @if ($data->status === 'yankes')
-                                        selected="selected"
-                                    @endif>Bid. Yankes
-                                </option>
-                                <option value="{{ Crypt::encrypt('sdk') }}"
-                                        @if ($data->status === 'sdk')
-                                        selected="selected"
-                                    @endif>Bid. SDK
-                                </option>
-                                <option value="{{ Crypt::encrypt('p2') }}"
-                                        @if ($data->status === 'p2')
-                                        selected="selected"
-                                    @endif>Bid. P2
-                                </option>
+                                @foreach($roles as $list)
+                                    <option @if ($data->roles->first()->id == $list->id)
+                                            selected="selected"
+                                            @endif value="{{ Crypt::encrypt($list->id) }}">{{ $list->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="form-group">
