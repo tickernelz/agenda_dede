@@ -1,0 +1,17 @@
+echo web: vendor/bin/heroku-php-apache2 public/ > Procfile
+git push heroku heroku:master
+heroku config:add APP_DEBUG=true
+heroku config:add APP_KEY=base64:wG8reQ3kEzAFOryXmVaEO8bA9hXEZGGu5FDXe1KEYWU=
+heroku config:add APP_NAME=kp-dede
+heroku config:add APP_ENV=production
+heroku config:add APP_URL=https://kp-dede.herokuapp.com
+heroku addons:create heroku-postgresql:hobby-dev
+heroku pg:credentials:url
+heroku config:add DB_CONNECTION=pgsql
+heroku config:add DB_HOST=ec2-34-194-100-156.compute-1.amazonaws.com
+heroku config:add DB_PORT=5432
+heroku config:add DB_DATABASE=daqmgn5j46r4e6
+heroku config:add DB_USERNAME=zaoncizvqkjiir
+heroku config:add DB_PASSWORD=8183ad372c3550e2754f7e1b2b74eb45a22c3dec2906fbb29ef42873a502d532
+heroku run php artisan migrate:fresh --seed
+heroku run php artisan storage:link
