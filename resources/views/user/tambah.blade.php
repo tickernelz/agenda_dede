@@ -68,6 +68,11 @@
                                    placeholder="Masukan Username..">
                         </div>
                         <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                   placeholder="Masukan Email..">
+                        </div>
+                        <div class="form-group">
                             <label for="nama">Nama</label>
                             <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukan Nama..">
                         </div>

@@ -71,6 +71,11 @@
                                    placeholder="Masukan Username.." value="{{$data->username}}">
                         </div>
                         <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                   placeholder="Masukan Email.." value="{{$data->email}}">
+                        </div>
+                        <div class="form-group">
                             <label for="nama">Nama</label>
                             <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukan Nama.."
                                    value="{{$data->nama}}">
@@ -97,7 +102,7 @@
                         <div class="form-group">
                             <label for="password">Password</label>
                             <input type="password" class="form-control" id="password" name="password"
-                                   placeholder="Masukan password.." value="{{$data->password}}">
+                                   placeholder="Masukan password..">
                         </div>
                         <div class="form-group">
                             <button type="submit" class="btn btn-alt-primary">Edit</button>

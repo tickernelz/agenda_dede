@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Crypt;
+use Hash;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
-use Validator;
 
 class UserController extends Controller
 {
@@ -58,6 +58,7 @@ class UserController extends Controller
     {
         $request->validate([
             'username' => 'required|string|unique:users',
+            'email' => 'required|email|unique:users',
             'nama' => 'required|string',
             'nip' => 'required|unique:users',
             'status' => 'required|string',
@@ -65,18 +66,15 @@ class UserController extends Controller
         ]);
 
         // Get Request
-        $get_username = $request->input('username');
-        $get_nama = $request->input('nama');
-        $get_nip =$request->input('nip');
         $get_status = Crypt::decrypt($request->input('status'));
-        $get_password = bcrypt($request->input('password'));
 
         // Kirim Data ke Database
         $user = new User;
-        $user->username = $get_username;
-        $user->nama = $get_nama;
-        $user->nip = $get_nip;
-        $user->password = $get_password;
+        $user->username = $request->input('username');
+        $user->email = $request->input('email');
+        $user->nama = $request->input('nama');
+        $user->nip = $request->input('nip');
+        $user->password = Hash::make($request->input('password'));
         $user->save();
         $user->assignRole($get_status);
 
@@ -85,96 +83,28 @@ class UserController extends Controller
 
     public function edit(Request $request, int $id)
     {
-        $nipori = User::find($id)->nip;
-        $nipedit = $request->input('nip');
-        $usernameori = User::find($id)->username;
-        $usernameedit = $request->input('username');
-        $passori = User::find($id)->password;
-        $passedit = $request->input('password');
+        $data = User::where('id', $id)->first();
 
-        $rules1 = [
-            'username' => 'required|string',
+        $request->validate([
+            'username' => 'required|string|unique:users,username,'.$data->id,
+            'email' => 'required|email|unique:users,email,'.$data->id,
             'nama' => 'required|string',
-            'nip' => 'required',
+            'nip' => 'required|unique:users,nip,'.$data->id,
             'status' => 'required|string',
-            'password' => 'required|string',
-        ];
-
-        $rules2 = [
-            'username' => 'required|string|unique:users',
-            'nama' => 'required|string',
-            'nip' => 'required|unique:users',
-            'status' => 'required|string',
-            'password' => 'required|string',
-        ];
-
-        $rules3 = [
-            'username' => 'required|string',
-            'nama' => 'required|string',
-            'nip' => 'required|unique:users',
-            'status' => 'required|string',
-            'password' => 'required|string',
-        ];
-
-        $rules4 = [
-            'username' => 'required|string|unique:users',
-            'nama' => 'required|string',
-            'nip' => 'required',
-            'status' => 'required|string',
-            'password' => 'required|string',
-        ];
-
-        $messages = [
-            'username.required' => 'Username wajib diisi',
-            'username.unique' => 'Username harus beda dari yang lain',
-            'username.string' => 'Username tidak valid',
-            'nama.required' => 'Nama wajib diisi',
-            'nama.string' => 'Nama tidak valid',
-            'nip.required' => 'NIP wajib diisi',
-            'nip.unique' => 'NIP harus beda dari yang lain',
-            'status.required' => 'Status wajib diisi',
-            'status.string' => 'Status harus berupa string',
-            'password.required' => 'Password wajib diisi',
-            'password.string' => 'Password harus berupa string',
-        ];
-
-        if ($nipori === $nipedit && $usernameori === $usernameedit) {
-            return $this->extracted($request, $rules1, $messages, $id, $passori, $passedit);
-        }
-
-        if ($nipori === $nipedit) {
-            return $this->extracted($request, $rules4, $messages, $id, $passori, $passedit);
-        }
-
-        if ($usernameori === $usernameedit) {
-            return $this->extracted($request, $rules3, $messages, $id, $passori, $passedit);
-        }
-        return $this->extracted($request, $rules2, $messages, $id, $passori, $passedit);
-    }
-
-    public function extracted(Request $request, array $rules1, array $messages, int $id, $passori, $passedit): \Illuminate\Http\RedirectResponse
-    {
-        $validator = Validator::make($request->all(), $rules1, $messages);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput($request->all);
-        }
+            'password' => 'nullable|string',
+        ]);
 
         // Get Request
-        $get_username = $request->input('username');
-        $get_nama = $request->input('nama');
-        $get_nip =$request->input('nip');
         $get_status = Crypt::decrypt($request->input('status'));
-        $get_password = bcrypt($request->input('password'));
 
         // Edit Data
-        $data = User::where('id', $id)->first();
-        $data->username = $get_username;
-        $data->nama = $get_nama;
-        $data->nip = $get_nip;
-        if ($passori !== $passedit) {
-            $data->password = $get_password;
+        if ($request->filled('password')) {
+            $data->password = Hash::make($request->input('password'));
         }
+        $data->username = $request->input('username');
+        $data->email = $request->input('email');
+        $data->nama = $request->input('nama');
+        $data->nip = $request->input('nip');
         $data->save();
         $data->assignRole($get_status);
 

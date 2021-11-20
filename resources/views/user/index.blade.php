@@ -40,6 +40,7 @@
                             <th class="text-center">NIP</th>
                             <th class="text-center">Username</th>
                             <th class="text-center">Nama</th>
+                            <th class="text-center">Email</th>
                             <th class="text-center">Status</th>
                             <th class="text-center">Aksi</th>
                         </tr>
@@ -51,6 +52,7 @@
                                 <td class="text-center">{{ $li->nip }}</td>
                                 <td class="text-center">{{ $li->username }}</td>
                                 <td class="text-center">{{ $li->nama }}</td>
+                                <td class="text-center">{{ $li->email }}</td>
                                 <td class="text-center">{{ $li->roles->first()->name }}</td>
                                 <td class="text-center">
                                     <div class="btn-group btn-group-sm" role="group">
