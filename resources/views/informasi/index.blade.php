@@ -29,6 +29,16 @@
                 </div>
             </div>
             <div class="block-content">
+                @if (Session::has('success'))
+                    <div class="alert alert-success mb-3" role="alert">
+                        {{ Session::get('success') }}
+                    </div>
+                @endif
+                @if (Session::has('error'))
+                    <div class="alert alert-danger mb-3" role="alert">
+                        {{ Session::get('error') }}
+                    </div>
+                @endif
                 <div class="table-responsive">
                     <table class="table table-bordered table-vcenter js-dataTable-full">
                         <thead>
@@ -47,6 +57,7 @@
                             <th>Kota</th>
                             <th>Provinsi</th>
                             <th class="text-center">Berkas</th>
+                            <th class="text-center">Aksi</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -82,6 +93,12 @@
                                     @else
                                         Tidak Ada Berkas
                                     @endif
+                                </td>
+                                <td class="text-center">
+                                    <a type="button" class="btn btn-primary"
+                                       href="{{ route('kirim-notifikasi', $list->id) }}">
+                                        Kirim Notifikasi
+                                    </a>
                                 </td>
                             </tr>
                         @endforeach

@@ -5,6 +5,7 @@ use App\Http\Controllers\BagianController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InformasiKegiatan;
 use App\Http\Controllers\KegiatanController;
+use App\Http\Controllers\KirimEmailController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -52,6 +53,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('kegiatan/cari/hapus/{id}', [KegiatanController::class, 'hapus'])->name('hapus-kegiatan');
         Route::get('kegiatan/cari/hapus-berkas/{id}', [KegiatanController::class, 'hapus_berkas'])->name('hapus-berkas-kegiatan');
         Route::get('get-kegiatan', [KegiatanController::class, 'getdataKegiatan'])->name('get-kegiatan');
+        Route::get('/kirim_email/{id}', [KirimEmailController::class, 'kirim'])->name('kirim-notifikasi');
+
     });
     Route::group(['middleware' => ['can:melihat agenda']], function () {
         Route::get('informasi', [InformasiKegiatan::class, 'index'])->name('index-informasi');
