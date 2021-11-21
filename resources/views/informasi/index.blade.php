@@ -57,7 +57,9 @@
                             <th>Kota</th>
                             <th>Provinsi</th>
                             <th class="text-center">Berkas</th>
-                            <th class="text-center">Aksi</th>
+                            @if(Auth::user()->hasAnyRole('Super Admin|Admin'))
+                                <th class="text-center">Aksi</th>
+                            @endif
                         </tr>
                         </thead>
                         <tbody>
@@ -94,12 +96,14 @@
                                         Tidak Ada Berkas
                                     @endif
                                 </td>
-                                <td class="text-center">
-                                    <a type="button" class="btn btn-primary"
-                                       href="{{ route('kirim-notifikasi', $list->id) }}">
-                                        Kirim Notifikasi
-                                    </a>
-                                </td>
+                                @if(Auth::user()->hasAnyRole('Super Admin|Admin'))
+                                    <td class="text-center">
+                                        <a type="button" class="btn btn-primary"
+                                           href="{{ route('kirim-notifikasi', $list->id) }}">
+                                            Kirim Notifikasi
+                                        </a>
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                         </tbody>
