@@ -10,9 +10,22 @@
     <script src="{{ asset('js/plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('js/plugins/datatables/dataTables.bootstrap4.min.js') }}"></script>
     <script src="//cdn.datatables.net/plug-ins/1.11.3/sorting/natural.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.11.3/sorting/enum.js"></script>
 
     <!-- Page JS Code -->
     <script src="{{ asset('js/pages/tables_datatables.js') }}"></script>
+    <script>
+        jQuery('.js-dataTable-informasi').dataTable({
+            pageLength: 5,
+            lengthMenu: [[5, 10, 20], [5, 10, 20]],
+            autoWidth: false,
+            order: [[1, 'asc']],
+            columnDefs: [
+                {type: 'natural', targets: '_all'}
+            ]
+        });
+    </script>
+
 @endsection
 
 @section('judul')
@@ -40,7 +53,7 @@
                     </div>
                 @endif
                 <div class="table-responsive">
-                    <table class="table table-bordered table-vcenter js-dataTable-full">
+                    <table class="table table-bordered table-vcenter js-dataTable-informasi">
                         <thead>
                         <tr>
                             <th class="text-center" style="width: 3%">#</th>
@@ -59,6 +72,7 @@
                             <th class="text-center">Berkas</th>
                             @if(Auth::user()->hasAnyRole('Super Admin|Admin'))
                                 <th class="text-center">Aksi</th>
+                                <th class="text-center">Riwayat Notifikasi</th>
                             @endif
                         </tr>
                         </thead>
@@ -67,13 +81,13 @@
                             <tr>
                                 <td class="text-center">{{$loop->iteration}}</td>
                                 @if (\Carbon\Carbon::now() < ($list->tanggaldari))
-                                    <td><span class="badge badge-primary">Belum Dimulai</span></td>
+                                    <td data-order="1"><span class="badge badge-secondary">Kegiatan Akan Dimulai</span></td>
                                 @endif
                                 @if (\Carbon\Carbon::now() > ($list->tanggaldari) && \Carbon\Carbon::now() < ($list->tanggalsampai))
-                                    <td><span class="badge badge-secondary">Berlangsung</span></td>
+                                    <td data-order="2"><span class="badge badge-primary">Berlangsung</span></td>
                                 @endif
                                 @if (\Carbon\Carbon::now() > ($list->tanggalsampai))
-                                    <td><span class="badge badge-success">Selesai</span></td>
+                                    <td data-order="3"><span class="badge badge-success">Kegiatan Selesai</span></td>
                                 @endif
                                 @if(Auth::user()->hasAnyRole('Super Admin|Admin'))
                                     <td>{{$list->bagian->nama}}</td>
@@ -98,10 +112,17 @@
                                 </td>
                                 @if(Auth::user()->hasAnyRole('Super Admin|Admin'))
                                     <td class="text-center">
-                                        <a type="button" class="btn btn-primary"
+                                        <a type="button" class="btn btn-sm btn-primary"
                                            href="{{ route('kirim-notifikasi', $list->id) }}">
                                             Kirim Notifikasi
                                         </a>
+                                    </td>
+                                    <td class="text-center">
+                                        @if($list->notifikasi)
+                                            {{$list->notifikasi->diffForHumans()}}
+                                        @else
+                                            Belum ada notifikasi
+                                        @endif
                                     </td>
                                 @endif
                             </tr>

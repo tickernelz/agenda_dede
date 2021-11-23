@@ -26,6 +26,7 @@ class CreateKegiatansTable extends Migration
             $table->string('kota');
             $table->string('provinsi');
             $table->string('berkas')->nullable();
+            $table->dateTime('notifikasi')->nullable();
             $table->timestamps();
         });
     }

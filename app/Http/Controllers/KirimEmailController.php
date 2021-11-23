@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\SendMail;
 use App\Models\Kegiatan;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 
 class KirimEmailController extends Controller
@@ -25,6 +26,8 @@ class KirimEmailController extends Controller
             ];
             Mail::to($email)->send(new SendMail($data));
         }
+        $kegiatan->notifikasi = Carbon::now();
+        $kegiatan->save();
         return back()->with('success', 'Berhasil mengirim email notifikasi!');
     }
 }

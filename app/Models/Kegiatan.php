@@ -41,6 +41,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property-read int|null $bagian_count
  * @property int $bagian_id
  * @method static \Illuminate\Database\Eloquent\Builder|Kegiatan whereBagianId($value)
+ * @property \Illuminate\Support\Carbon|null $notifikasi
+ * @method static \Illuminate\Database\Eloquent\Builder|Kegiatan whereNotifikasi($value)
  */
 class Kegiatan extends Model
 {
@@ -48,6 +50,10 @@ class Kegiatan extends Model
 
     protected $guarded = [
         'id',
+    ];
+
+    protected $dates = [
+        'notifikasi',
     ];
 
     public function bagian()
