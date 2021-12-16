@@ -76,7 +76,20 @@ class KegiatanController extends Controller
             'berkas' => 'file|mimes:pdf',
         ]);
 
-        $this->request_tambah($request, $KegiatanModel);
+        // Cek Tanggal
+        if ($request->tglmulai > $request->tglakhir) {
+            return back()->with('error', 'Tanggal Mulai Tidak Boleh Lebih Dari Tanggal Akhir!');
+        }
+
+        $KegiatanModel->bagian_id = $request->bagian;
+        $KegiatanModel->tanggaldari = $request->tglmulai;
+        $KegiatanModel->tanggalsampai = $request->tglakhir;
+        $KegiatanModel->kegiatan = $request->kegiatan;
+        $KegiatanModel->keterangan = $request->keterangan;
+        $KegiatanModel->tempat = $request->tempat;
+        $KegiatanModel->provinsi = $request->provinsi;
+        $KegiatanModel->kota = $request->kota;
+        $KegiatanModel->kecamatan = $request->kecamatan;
         if ($request->hasFile('berkas')) {
             $fileName = time() . '_' . $request->berkas->getClientOriginalName();
             $request->berkas->move(public_path('berkas'), $fileName);
@@ -129,23 +142,6 @@ class KegiatanController extends Controller
 
         return back()
             ->with('success', 'Data Berhasil Diperbarui!');
-    }
-
-    /**
-     * @param Request $request
-     * @param Kegiatan $KegiatanModel
-     */
-    public function request_tambah(Request $request, Kegiatan $KegiatanModel): void
-    {
-        $KegiatanModel->bagian_id = $request->bagian;
-        $KegiatanModel->tanggaldari = $request->tglmulai;
-        $KegiatanModel->tanggalsampai = $request->tglakhir;
-        $KegiatanModel->kegiatan = $request->kegiatan;
-        $KegiatanModel->keterangan = $request->keterangan;
-        $KegiatanModel->tempat = $request->tempat;
-        $KegiatanModel->provinsi = $request->provinsi;
-        $KegiatanModel->kota = $request->kota;
-        $KegiatanModel->kecamatan = $request->kecamatan;
     }
 
     public function hapus(int $id)
